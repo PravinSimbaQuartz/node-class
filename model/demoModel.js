@@ -33,7 +33,10 @@ const DemoSchema = new mongoose.Schema({
     isActive: {
         type: mongoose.Schema.Types.Boolean,
     }
-})
+},
+    { timestamps: true }
+
+)
 
 
 

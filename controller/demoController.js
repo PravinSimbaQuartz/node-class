@@ -55,14 +55,23 @@ const findAllUsers = async function (req, res) {
 }
 
 
+const getSingleUser = async (req, res) => {
 
+    // const { emailaaaaa } = req.query
 
+    const { age } = req.query
 
+    const data = await demoModels.findOne({ age: age })
+    if (!data) {
+        return res.send({ message: "email not found" })
+    }
+    res.send({ message: "data fetch successfully", data })
 
+}
 
 
 
 // module.exports = createDemoData
 // module.exports = findAllUsers
 
-module.exports = { createDemoData, findAllUsers }
+module.exports = { createDemoData, findAllUsers, getSingleUser }
