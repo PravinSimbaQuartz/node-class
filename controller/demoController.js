@@ -1,4 +1,6 @@
 const demoModels = require("../model/demoModel.js")
+const { ObjectId } = require("mongoose").Types
+
 
 
 const createDemoData = async function (req, res) {
@@ -48,20 +50,36 @@ const createDemoData = async function (req, res) {
 
 const findAllUsers = async function (req, res) {
 
-    const findData = await demoModels.find()
-    console.log('findData11111', findData)
+    const { age } = req.query
 
-    res.send({ message: "User get successfully" })
+    const findData = await demoModels.find({ age: age })
+
+    res.send({ message: "User get successfully", findData })
 }
+
+
+// const getSingleUser = async (req, res) => {
+
+//     // const { emailaaaaa } = req.query
+
+//     const { age } = req.query
+
+//     const data = await demoModels.findOne({ age: age })
+//     if (!data) {
+//         return res.send({ message: "email not found" })
+//     }
+//     res.send({ message: "data fetch successfully", data })
+
+// }
 
 
 const getSingleUser = async (req, res) => {
 
-    // const { emailaaaaa } = req.query
+    const { id } = req.params
 
-    const { age } = req.query
+    console.log('id', typeof (id))
 
-    const data = await demoModels.findOne({ age: age })
+    const data = await demoModels.findById({ _id: (id) })
     if (!data) {
         return res.send({ message: "email not found" })
     }
