@@ -14,7 +14,8 @@ const createDemoData = async function (req, res) {
 
 
 
-    const { firstName,
+    const {
+        firstName,
         lastName,
         email,
         password,
@@ -52,7 +53,7 @@ const findAllUsers = async function (req, res) {
 
     const { age } = req.query
 
-    const findData = await demoModels.find({ age: age })
+    const findData = await demoModels.find()
 
     res.send({ message: "User get successfully", findData })
 }
@@ -89,7 +90,52 @@ const getSingleUser = async (req, res) => {
 
 
 
+const updateUser = async (req, res) => {
+    const { id } = req.params
+
+    const { firstName,
+        lastName,
+        email,
+        password,
+        address,
+        mobileNumber,
+        age,
+        isActive } = req.body
+
+    const updatedData = await demoModels.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        {
+            firstName,
+            lastName,
+            email,
+            password,
+            address,
+            mobileNumber,
+            age,
+            isActive
+        },
+
+        // { ...req.body },
+
+        { new: true }
+    )
+
+    res.send({
+        message: "data fetch successfully",
+        updatedData
+    })
+}
+
+
+
+
+
+
+
+
+
+
 // module.exports = createDemoData
 // module.exports = findAllUsers
 
-module.exports = { createDemoData, findAllUsers, getSingleUser }
+module.exports = { createDemoData, findAllUsers, getSingleUser, updateUser }
