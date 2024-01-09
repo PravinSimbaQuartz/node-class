@@ -127,15 +127,16 @@ const updateUser = async (req, res) => {
 }
 
 
+const deleteUser = async (req, res) => {
 
+    const { id } = req.params
 
-
-
-
-
+    const aaa = await demoModels.findOneAndDelete({ _id: new ObjectId(id) })
+    res.send({ message: "User deleted successfully" })
+}
 
 
 // module.exports = createDemoData
 // module.exports = findAllUsers
 
-module.exports = { createDemoData, findAllUsers, getSingleUser, updateUser }
+module.exports = { createDemoData, findAllUsers, getSingleUser, updateUser, deleteUser }

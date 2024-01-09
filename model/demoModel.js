@@ -21,6 +21,7 @@ const DemoSchema = new mongoose.Schema({
     },
     address: {
         type: mongoose.Schema.Types.String,
+
     },
     mobileNumber: {
         type: mongoose.Schema.Types.Number,
