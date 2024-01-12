@@ -1,44 +1,42 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const DemoSchema = new mongoose.Schema({
+const authorSchema = new mongoose.Schema({
+    // title: {
+    //     type: mongoose.Schema.Types.String,
+    //     enum: ["Mr", "Mrs", "Miss"]
+    // },
+
     firstName: {
         type: mongoose.Schema.Types.String,
-        lowercase: true
     },
     lastName: {
         type: mongoose.Schema.Types.String,
-        uppercase: true,
-        trim: true
     },
     email: {
         type: mongoose.Schema.Types.String,
         required: true,
-        unique: true,
-
+        unique: true
     },
     password: {
         type: mongoose.Schema.Types.String,
-    },
-    address: {
-        type: mongoose.Schema.Types.String,
-
+        required: true,
     },
     mobileNumber: {
         type: mongoose.Schema.Types.Number,
         required: true,
-        unique: true,
-    },
-    age: {
-        type: mongoose.Schema.Types.Number,
+        unique: true
     },
     isActive: {
         type: mongoose.Schema.Types.Boolean,
+    },
+    gender: {
+        type: mongoose.Schema.Types.String,
+        enum: ["male", "female", "other"]
     }
+
 },
     { timestamps: true }
-
 )
 
 
-
-module.exports = new mongoose.model("demo", DemoSchema, "demo")
+module.exports = new mongoose.model("author", authorSchema, "author")
