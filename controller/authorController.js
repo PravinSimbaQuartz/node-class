@@ -14,6 +14,11 @@ const createAuthor = async function (req, res) {
         } = req.body
 
 
+        if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
+            return res.status(400).send({ message: "please enter mobile number in valid form || please enter correct 10 digint number" })
+        }
+
+
         const authorData = await authorModel.create({
             firstName,
             lastName,
@@ -137,3 +142,9 @@ const deleteAuthor = async (req, res) => {
 
 
 module.exports = { createAuthor, findAllAuther, findSingleAuthor, updateAuthor, deleteAuthor }
+
+
+
+// /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email)
+
+// (!/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/.test(password))
