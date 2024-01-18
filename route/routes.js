@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { createAuthor, findSingleAuthor, findAllAuther, updateAuthor, deleteAuthor } = require("../controller/authorController")
 const { createBlog, getSingleBlog } = require("../controller/blogController")
-const { createReview } = require("../controller/reviewController")
+const { createReview, findBlogAllReviews } = require("../controller/reviewController")
 // Autor route
 router.post("/author", createAuthor)
 router.get("/author", findAllAuther)
@@ -17,6 +17,7 @@ router.get("/blog/:id", getSingleBlog)
 
 //review routes
 router.post("/review", createReview)
+router.get("/review", findBlogAllReviews)
 
 
 module.exports = router

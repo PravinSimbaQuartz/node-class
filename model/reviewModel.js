@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 
 const reviewSchema = new mongoose.Schema({
-
+    reviewerName: { type: mongoose.Schema.Types.String, default: 'Guest' },
     rating: {
         type: mongoose.Schema.Types.Number,
         required: true
