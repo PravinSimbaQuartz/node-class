@@ -29,27 +29,20 @@ const createReview = async (req, res) => {
 const findBlogAllReviews = async (req, res) => {
     try {
 
-        const { blogId } = req.query
+        const { rating } = req.query
+        // const { blogId } = req.query
+        console.log('blogId', typeof (blogId))
 
 
-        const blogData = await reviewmodel.find({ blogId: ObjectId(blogId) })
+        // const blogData = await reviewmodel.find({ blogId: (blogId) })
+        const blogData = await reviewmodel.find({ rating: rating })
         res.status(200).send({ message: 'Review fetch successfully', blogData })
-
 
     } catch (error) {
         res.status(500).send({ message: error.message, success: false })
 
     }
-
-
 }
-
-
-
-
-
-
-
 
 module.exports = { createReview, findBlogAllReviews }
 

@@ -40,11 +40,14 @@ const createAuthor = async function (req, res) {
 const findAllAuther = async (req, res) => {
     try {
 
-        const allAuthor = await authorModel.find()
+        const { isActive } = req.query
+        console.log(11111111, typeof isActive)
 
-        const authorCount = await authorModel.countDocuments()
+        const allAuthor = await authorModel.find({ isActive: isActive })
 
-        res.status(200).send({ message: "Author data fetch successfully", count: authorCount, allAuthor })
+        // const authorCount = await authorModel.countDocuments()
+
+        res.status(200).send({ message: "Author data fetch successfully", allAuthor })
 
     } catch (error) {
         res.status(500).send({ message: error.message })
