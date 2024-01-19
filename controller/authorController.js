@@ -1,11 +1,12 @@
 const authorModel = require("../model/authorModel")
 const { ObjectId } = require("mongoose").Types
+const bcrypt = require("bcrypt")
 
 const createAuthor = async function (req, res) {
     try {
         const {
-            firstName,
-            lastName,
+            yourName,
+            yourSirName,
             email,
             password,
             mobileNumber,
@@ -18,16 +19,35 @@ const createAuthor = async function (req, res) {
             return res.status(400).send({ message: "please enter mobile number in valid form || please enter correct 10 digint number" })
         }
 
+        // const authorData = await authorModel.create({
+        // firstName,
+        // lastName,
+        // email,
+        // password,
+        // mobileNumber,
+        // isActive,
+        // gender
+        // })
 
-        const authorData = await authorModel.create({
-            firstName,
-            lastName,
-            email,
-            password,
-            mobileNumber,
-            isActive,
-            gender
+        const salt = await bcrypt.genSalt(10)
+        console.log('salt', salt)
+
+        const hashPassword = await bcrypt.hash(password, salt)
+        console.log('hashPassword', hashPassword)
+
+
+
+
+        const authorData = new authorModel({
+            firstName: yourName,
+            lastName: yourSirName,
+            email: email,
+            password: hashPassword,
+            mobileNumber: mobileNumber,
+            isActive: isActive,
+            gender: gender
         })
+        await authorData.save()
 
         res.status(201).send({ message: "Author created successfully", success: true, authorData })
 
