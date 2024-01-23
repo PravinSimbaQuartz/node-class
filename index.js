@@ -17,3 +17,7 @@ mongoose.connect("mongodb+srv://pravinpatekar:wb0enET0wmCesDqn@cluster0.ftnu4ge.
 app.use("/api", route)
 
 app.listen(port, () => console.log(`MongoDB is listening on port ${port}`))
+
+
+//runTime error
+//compiletime error

@@ -14,6 +14,14 @@ const createAuthor = async function (req, res) {
             gender
         } = req.body
 
+        // const yourName = req.body.yourName
+        // const yourSirName = req.body.yourSirName
+        // const mobileNumber = req.body.mobileNumber
+        // const yourName = req.body.yourName
+        // const yourName = req.body.yourName
+        // const yourName = req.body.yourName
+
+
 
         if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
             return res.status(400).send({ message: "please enter mobile number in valid form || please enter correct 10 digint number" })
@@ -171,3 +179,10 @@ module.exports = { createAuthor, findAllAuther, findSingleAuthor, updateAuthor, 
 // /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email)
 
 // (!/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/.test(password))
+
+// create, find, findOne, findOneAndUpdate, findOneAndDelete,
+// countDocuments,findById, findByIdAndUpdate, findByIdAndDelete
+
+// find => array
+// remainingQueries => Object
+

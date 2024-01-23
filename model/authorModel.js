@@ -28,6 +28,7 @@ const authorSchema = new mongoose.Schema({
     },
     isActive: {
         type: mongoose.Schema.Types.Boolean,
+
     },
     gender: {
         type: mongoose.Schema.Types.String,
