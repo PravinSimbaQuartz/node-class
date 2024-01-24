@@ -65,6 +65,58 @@ const createAuthor = async function (req, res) {
     }
 }
 
+
+const loginAuthor = async (req, res) => {
+    try {
+
+        const { email, password } = req.body
+
+        if (!email) {
+            return res.status(400).send({
+                message: "Please enter email"
+            })
+        }
+        if (!password) {
+            return res.status(400).send({
+                message: "Please enter password"
+            })
+        }
+
+        const isExistAuthor = await authorModel.findOne({ email: email })
+        console.log('isExistAuthor', isExistAuthor)
+
+
+        if (!isExistAuthor) {
+            return res.status(404).send({ message: "Email not found please singup then login" })
+        }
+
+        const isMatchPassword = await bcrypt.compare(password, isExistAuthor.password)
+        console.log('isMatchPassword', isMatchPassword)
+
+        if (!isMatchPassword) {
+            return res.status(400).send({ message: "Incorrect password || please enter correct password" })
+
+        }
+
+
+
+
+
+
+        res.status(200).send({ message: "Login successful" })
+
+    } catch (error) {
+        return res.status(500).send({ message: error.message })
+
+    }
+}
+
+
+
+
+
+
+
 const findAllAuther = async (req, res) => {
     try {
 
@@ -172,7 +224,7 @@ const deleteAuthor = async (req, res) => {
 }
 
 
-module.exports = { createAuthor, findAllAuther, findSingleAuthor, updateAuthor, deleteAuthor }
+module.exports = { createAuthor, findAllAuther, findSingleAuthor, updateAuthor, deleteAuthor, loginAuthor }
 
 
 
@@ -185,4 +237,23 @@ module.exports = { createAuthor, findAllAuther, findSingleAuthor, updateAuthor, 
 
 // find => array
 // remainingQueries => Object
+
+
+
+
+
+
+// const abc = {
+//     age: 16,
+//     number: 9876543210
+// }
+
+// const abcd = [
+//     {
+//         age: 16,
+//         number: 9876543210
+//     }
+// ]
+
+// abcd[0].number
 
