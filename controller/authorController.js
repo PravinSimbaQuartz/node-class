@@ -1,6 +1,7 @@
 const authorModel = require("../model/authorModel")
 const { ObjectId } = require("mongoose").Types
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 const createAuthor = async function (req, res) {
     try {
@@ -95,15 +96,15 @@ const loginAuthor = async (req, res) => {
 
         if (!isMatchPassword) {
             return res.status(400).send({ message: "Incorrect password || please enter correct password" })
-
         }
 
 
+        const createToken = jwt.sign({ email: email }, "secreteKey", { expiresIn: "10m" })
 
 
 
 
-        res.status(200).send({ message: "Login successful" })
+        res.status(200).send({ message: "Login successful", createToken })
 
     } catch (error) {
         return res.status(500).send({ message: error.message })
@@ -257,3 +258,35 @@ module.exports = { createAuthor, findAllAuther, findSingleAuthor, updateAuthor, 
 
 // abcd[0].number
 
+
+
+
+//reset =>
+
+//mail
+
+
+
+//database
+// findOne(email: mail)
+//password
+
+// match= oldPassword DB password
+
+// findOneAndUpdate
+
+
+// oldPassword =
+// newPassword =
+// confirmPassword =
+
+
+
+// mail
+
+// newPassword =
+// confirmPassword =
+
+// findOneAndUpdate({ email: email }, { password: newPassword }, { new: true })
+
+// findOneAndUpdate
