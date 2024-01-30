@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken")
 
 const createAuthor = async function (req, res) {
     try {
+
+
+
         const {
             yourName,
             yourSirName,
@@ -66,11 +69,11 @@ const createAuthor = async function (req, res) {
     }
 }
 
-
 const loginAuthor = async (req, res) => {
     try {
-
         const { email, password } = req.body
+
+
 
         if (!email) {
             return res.status(400).send({
@@ -100,10 +103,6 @@ const loginAuthor = async (req, res) => {
 
 
         const createToken = jwt.sign({ email: email }, "secreteKey", { expiresIn: "10m" })
-
-
-
-
         res.status(200).send({ message: "Login successful", createToken })
 
     } catch (error) {
@@ -112,23 +111,16 @@ const loginAuthor = async (req, res) => {
     }
 }
 
-
-
-
-
-
-
-const findAllAuther = async (req, res) => {
+const findAllAuther = async (req, res, next) => {
     try {
 
         const { isActive } = req.query
-        console.log(11111111, typeof isActive)
-
         const allAuthor = await authorModel.find({ isActive: isActive })
 
         // const authorCount = await authorModel.countDocuments()
 
-        res.status(200).send({ message: "Author data fetch successfully", allAuthor })
+        // res.status(200).send({ message: "Author data fetch successfully", allAuthor })
+        next();
 
     } catch (error) {
         res.status(500).send({ message: error.message })
