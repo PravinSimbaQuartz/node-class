@@ -18,6 +18,7 @@ app.use("/api", route)
 
 app.listen(port, () => console.log(`MongoDB is listening on port ${port}`))
 
+app.all("*", function (req, res) {
+    res.status(404).send({ message: "Url not found" })
+})
 
-//runTime error
-//compiletime error

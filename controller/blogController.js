@@ -46,8 +46,19 @@ const getSingleBlog = async (req, res) => {
 
     }
 }
+const getAllBlog = async (req, res) => {
+    try {
+
+        const blogData = await blogModel.find()
 
 
+        res.status(200).send({ message: "Blog fetch successfully", blogData })
 
 
-module.exports = { createBlog, getSingleBlog }
+    } catch (error) {
+        return res.status(500).send({ message: error.message, success: false })
+
+    }
+}
+
+module.exports = { createBlog, getSingleBlog, getAllBlog }
