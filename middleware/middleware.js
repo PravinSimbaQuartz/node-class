@@ -9,7 +9,7 @@ const authentication = async (req, res, next) => {
         if (!Authorization) {
             return res.status(401).send({ message: "Please login first || Unauthourised" })
         }
-
+        let verifiedToken;
         jwt.verify(Authorization, "secreteKey", function (err, decoded) {
             if (err) {
                 console.log('err', err)
@@ -18,9 +18,7 @@ const authentication = async (req, res, next) => {
                 verifiedToken = decoded
             }
         })
-
         next()
-
     } catch (error) {
         return res.status(500).send({ message: error.message })
     }
