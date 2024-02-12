@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { authentication } = require("../middleware/middleware")
+const { authentication, authorization } = require("../middleware/middleware")
 const { createAuthor, findSingleAuthor, findAllAuther, updateAuthor, deleteAuthor, loginAuthor } = require("../controller/authorController")
 const { createBlog, getSingleBlog, getAllBlog } = require("../controller/blogController")
 const { createReview, findBlogAllReviews } = require("../controller/reviewController")
@@ -9,9 +9,9 @@ const { createReview, findBlogAllReviews } = require("../controller/reviewContro
 
 // Autor route
 router.post("/author", createAuthor)
-router.get("/author", authentication, findAllAuther)
+router.get("/author", findAllAuther)
 router.get("/author/:id", findSingleAuthor)
-router.put("/author/:id", updateAuthor)
+router.put("/author/:id", authentication, authorization, updateAuthor)
 router.delete("/author/:id", deleteAuthor)
 router.post("/login", loginAuthor)
 

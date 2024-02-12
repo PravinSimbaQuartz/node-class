@@ -101,7 +101,7 @@ const loginAuthor = async (req, res) => {
             return res.status(400).send({ message: "Incorrect password || please enter correct password" })
         }
 
-        const createToken = jwt.sign({ email: email }, "secreteKey", { expiresIn: "10m" })
+        const createToken = jwt.sign({ authorId: isExistAuthor._id }, "secreteKey", { expiresIn: "10m" })
         res.status(200).send({ message: "Login successful", createToken })
 
     } catch (error) {
@@ -112,8 +112,8 @@ const loginAuthor = async (req, res) => {
 const findAllAuther = async (req, res, next) => {
     try {
 
-        // const { isActive } = req.query
-        const allAuthor = await authorModel.find()
+        const { gender } = req.query
+        const allAuthor = await authorModel.find({ gender: gender })
 
         // const authorCount = await authorModel.countDocuments()
 

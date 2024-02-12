@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken")
+const authorModel = require("../model/authorModel")
+const { ObjectId } = require("mongoose").Types
 
 const authentication = async (req, res, next) => {
     try {
@@ -9,7 +11,7 @@ const authentication = async (req, res, next) => {
         if (!Authorization) {
             return res.status(401).send({ message: "Please login first || Unauthourised" })
         }
-        let verifiedToken;
+        // let verifiedToken;
         jwt.verify(Authorization, "secreteKey", function (err, decoded) {
             if (err) {
                 console.log('err', err)
@@ -24,7 +26,45 @@ const authentication = async (req, res, next) => {
     }
 }
 
+const authorization = async (req, res, next) => {
+    try {
+        const idFromToken = verifiedToken.authorId
+        const { id } = req.params
+
+        const checkAuthor = await blogModel.findOne({ _id: new ObjectId(idFromToken) })
+        console.log(checkAuthor)
+
+        if (idFromToken !== id) {
+            return res.status(403).send({ message: "Forbidden / You have not access of this route " })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).send({ message: error.message })
+
+    }
+}
+
+// const authorization = async (req, res, next) => {
+//     try {
+//         const idFromToken = verifiedToken.authorId
+//         const { id } = req.params
+
+//         const checkBlog = await blogModel.findOne({ _id: new ObjectId(id) })
+//         console.log(checkAuthor)
+
+//         if (idFromToken !== checkBlog.authorId) {
+//             return res.status(403).send({ message: "Forbidden / You have not access of this route " })
+//         }
+//         next();
+//     } catch (error) {
+//         return res.status(500).send({ message: error.message })
+
+//     }
+// }
 
 
 
-module.exports = { authentication }
+
+module.exports = { authentication, authorization }
+
+

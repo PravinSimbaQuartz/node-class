@@ -14,7 +14,7 @@ mongoose.connect("mongodb+srv://pravinpatekar:wb0enET0wmCesDqn@cluster0.ftnu4ge.
     useNewUrlParser: true,
 }).then(async () => {
     console.log("MongoDB is connected");
-    console.log(await authorModel.findOne({ email: "navnoor@gmail.com" }))
+    // console.log(await authorModel.findOne({ email: "navnoor@gmail.com" }))
 }
 ).catch((err) => console.log(err))
 
