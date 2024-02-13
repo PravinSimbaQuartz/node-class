@@ -109,16 +109,49 @@ const loginAuthor = async (req, res) => {
     }
 }
 
-const findAllAuther = async (req, res, next) => {
+const findAllAuther = async (req, res) => {
     try {
-
         const { gender } = req.query
-        const allAuthor = await authorModel.find({ gender: gender })
-
+        // const allAuthor = await authorModel.find()
         // const authorCount = await authorModel.countDocuments()
 
+        const allAuthor = await authorModel.aggregate([
+            // {
+            //     $match: {
+            //         gender: gender
+            //     }
+            // },
+            { $sort: { createdAt: 1 } },
+            {
+                $lookup:
+                {
+                    from: "blog",
+                    localField: "_id",
+                    foreignField: "authorId",
+                    as: "blogDetails"
+                }
+            },
+
+            {
+                $unwind: {
+                    path: "$blogDetails",
+                    preserveNullAndEmptyArrays: true
+
+                }
+            },
+            {
+                $lookup: {
+                    from: "review",
+                    localField: "blogDetails._id",
+                    foreignField: "blogId",
+                    as: "reviewDetails"
+                }
+            }
+        ])
+
+
+
         res.status(200).send({ message: "Author data fetch successfully", allAuthor })
-        // next();
 
     } catch (error) {
         res.status(500).send({ message: error.message })
@@ -129,14 +162,24 @@ const findSingleAuthor = async (req, res) => {
     try {
         const { id } = req.params
 
-        const authorData = await authorModel.findOne({ _id: new ObjectId(id) })
+        // const authorData = await authorModel.findOne({ _id: new ObjectId(id) })
 
-        if (!authorData) {
+
+        const authorData = await authorModel.aggregate([{
+            $match: {
+                _id: new ObjectId(id)
+            }
+        }])
+
+
+        if (!authorData.length) {
             return res.status(404).send({ message: "Author not found" })
-
         }
 
-        res.status(200).send({ message: "Author data fetch successfully", authorData })
+        // result in array => converted into object
+        res.status(200).send({ message: "Author data fetch successfully", authorData: authorData[0] })
+
+        // res.status(200).send({ message: "Author data fetch successfully", authorData })
 
     } catch (error) {
         res.status(500).send({ message: error.message })
