@@ -111,16 +111,25 @@ const loginAuthor = async (req, res) => {
 
 const findAllAuther = async (req, res) => {
     try {
-        const { gender } = req.query
-        // const allAuthor = await authorModel.find()
+
+        // const { gender,isActive } = req.query
+
+        // const allAuthor = await authorModel.find({gender: req.query.gender})
         // const authorCount = await authorModel.countDocuments()
 
+        let searchcriteria = {};
+
+        if (req.query.gender) {
+            searchcriteria['$and'] = [{ gender: req.query.gender }]
+        }
+        if (req.query.isActive) {
+            searchcriteria['$and'] = [{ isActive: req.query.isActive }]
+        }
+
         const allAuthor = await authorModel.aggregate([
-            // {
-            //     $match: {
-            //         gender: gender
-            //     }
-            // },
+            {
+                $match: searchcriteria
+            },
             { $sort: { createdAt: 1 } },
             {
                 $lookup:
