@@ -122,9 +122,35 @@ const findAllAuther = async (req, res) => {
         if (req.query.gender) {
             searchcriteria['$and'] = [{ gender: req.query.gender }]
         }
+
+
         if (req.query.isActive) {
-            searchcriteria['$and'] = [{ isActive: req.query.isActive }]
+            searchcriteria.isActive = req.query.isActive === "true" ? true : false
         }
+
+        // if (req.query.isActive === "true") {
+        //     searchcriteria.isActive = true
+        // } else {
+        //     searchcriteria.isActive = false
+        // }
+
+        if (req.query.keyword) {
+            searchcriteria['$or'] = [
+                { firstName: { $regex: `^${req.query.keyword.trim()}`, $options: 'i' } },
+                { lastName: { $regex: `^${req.query.keyword.trim()}`, $options: 'i' } },
+                { email: { $regex: `^${req.query.keyword.trim()}`, $options: 'i' } },
+            ]
+        }
+
+
+        // and 1 1 => 1
+
+        // or 1 1 => 1
+        // 0 1 => 1
+        // 1 0 => 1
+
+
+
 
         const allAuthor = await authorModel.aggregate([
             {
