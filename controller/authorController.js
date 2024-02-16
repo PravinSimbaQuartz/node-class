@@ -114,8 +114,13 @@ const findAllAuther = async (req, res) => {
 
         // const { gender,isActive } = req.query
 
-        // const allAuthor = await authorModel.find({gender: req.query.gender})
+        // const allAuthor = await authorModel.find({ gender: req.query.gender })
+        // const allAuthor = await authorModel.find({ isActive: req.query.isActive })
         // const authorCount = await authorModel.countDocuments()
+
+        const startIndex = parseInt(req.query.startIndex || 0)
+        const viewSize = parseInt(req.query.viewSize || 10)
+        console.log('startIndex', startIndex, viewSize)
 
         let searchcriteria = {};
 
@@ -142,12 +147,12 @@ const findAllAuther = async (req, res) => {
             ]
         }
 
-
-        // and 1 1 => 1
-
-        // or 1 1 => 1
-        // 0 1 => 1
-        // 1 0 => 1
+        let searchcriteria1 = {}
+        if (req.query.keyword1) {
+            searchcriteria1['$or'] = [
+                { "blogDetails.title": { $regex: `^${req.query.keyword.trim()}`, $options: 'i' } },
+            ]
+        }
 
 
 
@@ -156,6 +161,7 @@ const findAllAuther = async (req, res) => {
             {
                 $match: searchcriteria
             },
+
             { $sort: { createdAt: 1 } },
             {
                 $lookup:
@@ -174,6 +180,8 @@ const findAllAuther = async (req, res) => {
 
                 }
             },
+            { $match: searchcriteria1 },
+
             {
                 $lookup: {
                     from: "review",
@@ -181,10 +189,10 @@ const findAllAuther = async (req, res) => {
                     foreignField: "blogId",
                     as: "reviewDetails"
                 }
-            }
+            },
+            { $skip: startIndex }, //5
+            { $limit: viewSize }, //10
         ])
-
-
 
         res.status(200).send({ message: "Author data fetch successfully", allAuthor })
 
