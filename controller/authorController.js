@@ -61,7 +61,18 @@ const createAuthor = async function (req, res) {
         })
         await authorData.save()
 
-        res.status(201).send({ message: "Author created successfully", success: true, authorData })
+        const Object = {
+            _id: authorData._id,
+            firstName: authorData.firstName,
+            lastName: authorData.lastName,
+            email: authorData.email,
+            mobileNumber: authorData.mobileNumber,
+            isActive: authorData.isActive,
+            gender: authorData.gender,
+            __v: authorData.__v,
+        }
+
+        res.status(201).send({ message: "Author created successfully", success: true, authorData: Object })
 
 
     } catch (error) {
@@ -114,7 +125,12 @@ const findAllAuther = async (req, res) => {
 
         // const { gender,isActive } = req.query
 
-        // const allAuthor = await authorModel.find({ gender: req.query.gender })
+        // const allAuthor = await authorModel.find().select({ password: 0, firstName: 0 })
+        // res.status(200).send({
+        //     message: "Author data fetch successfully",
+        //     allAuthor: allAuthor
+
+        // })
         // const allAuthor = await authorModel.find({ isActive: req.query.isActive })
         // const authorCount = await authorModel.countDocuments()
 
@@ -150,12 +166,9 @@ const findAllAuther = async (req, res) => {
         let searchcriteria1 = {}
         if (req.query.keyword1) {
             searchcriteria1['$or'] = [
-                { "blogDetails.title": { $regex: `^${req.query.keyword.trim()}`, $options: 'i' } },
+                { "blogDetails.title": { $regex: `^${req.query.keyword1.trim()}`, $options: 'i' } },
             ]
         }
-
-
-
 
         const allAuthor = await authorModel.aggregate([
             {
@@ -190,11 +203,32 @@ const findAllAuther = async (req, res) => {
                     as: "reviewDetails"
                 }
             },
-            { $skip: startIndex }, //5
-            { $limit: viewSize }, //10
+            {
+                $project: {
+                    password: 0,
+                }
+            },
+
+            {
+                $facet: {
+                    data: [
+                        { $skip: startIndex }, //5
+                        { $limit: viewSize }, //10
+                    ],
+                    count: [
+                        { $count: "total" }
+                    ]
+                }
+            },
         ])
 
-        res.status(200).send({ message: "Author data fetch successfully", allAuthor })
+
+        res.status(200).send({
+            message: "Author data fetch successfully",
+            count: allAuthor[0]?.count[0]?.total,
+            allAuthor: allAuthor[0]?.data
+
+        })
 
     } catch (error) {
         res.status(500).send({ message: error.message })
@@ -208,11 +242,19 @@ const findSingleAuthor = async (req, res) => {
         // const authorData = await authorModel.findOne({ _id: new ObjectId(id) })
 
 
-        const authorData = await authorModel.aggregate([{
-            $match: {
-                _id: new ObjectId(id)
+        const authorData = await authorModel.aggregate([
+            {
+                $match: {
+                    _id: new ObjectId(id)
+                },
+            },
+            {
+                $project: {
+                    password: 0
+                }
             }
-        }])
+
+        ])
 
 
         if (!authorData.length) {
