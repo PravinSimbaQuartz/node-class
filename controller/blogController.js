@@ -61,4 +61,16 @@ const getAllBlog = async (req, res) => {
     }
 }
 
-module.exports = { createBlog, getSingleBlog, getAllBlog }
+const deleteBlog = async (req, res) => {
+    try {
+        const { id } = req.params
+        const blogData = await blogModel.findOneAndDelete({ _id: new ObjectId(id) })
+        res.status(200).send({ message: "Blog deleted successfully" })
+    } catch (error) {
+        return res.status(500).send({ message: error.message, success: false })
+
+    }
+}
+
+
+module.exports = { createBlog, getSingleBlog, getAllBlog, deleteBlog }

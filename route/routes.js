@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { authentication, authorization } = require("../middleware/middleware")
 const { createAuthor, findSingleAuthor, findAllAuther, updateAuthor, deleteAuthor, loginAuthor } = require("../controller/authorController")
-const { createBlog, getSingleBlog, getAllBlog } = require("../controller/blogController")
+const { createBlog, getSingleBlog, getAllBlog, deleteBlog } = require("../controller/blogController")
 const { createReview, findBlogAllReviews } = require("../controller/reviewController")
 
 
@@ -20,6 +20,7 @@ router.post("/login", loginAuthor)
 router.post("/blog", createBlog)
 router.get("/blog", getAllBlog)
 router.get("/blog/:id", getSingleBlog)
+router.delete("/blog/:id", authentication, authorization, deleteBlog)
 
 //review routes
 router.post("/review", createReview)

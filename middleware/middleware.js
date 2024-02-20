@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
 const authorModel = require("../model/authorModel")
 const { ObjectId } = require("mongoose").Types
+const blogModel = require("../model/bolgModel")
 
 const authentication = async (req, res, next) => {
     try {
