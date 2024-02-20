@@ -15,7 +15,8 @@ const createAuthor = async function (req, res) {
             password,
             mobileNumber,
             isActive,
-            gender
+            gender,
+            addresss
         } = req.body
 
         // const yourName = req.body.yourName
@@ -57,7 +58,8 @@ const createAuthor = async function (req, res) {
             password: hashPassword,
             mobileNumber: mobileNumber,
             isActive: isActive,
-            gender: gender
+            gender: gender,
+            addresss: addresss
         })
         await authorData.save()
 
@@ -70,6 +72,7 @@ const createAuthor = async function (req, res) {
             isActive: authorData.isActive,
             gender: authorData.gender,
             __v: authorData.__v,
+            addresss: authorData.addresss,
         }
 
         res.status(201).send({ message: "Author created successfully", success: true, authorData: Object })
@@ -167,6 +170,7 @@ const findAllAuther = async (req, res) => {
         if (req.query.keyword1) {
             searchcriteria1['$or'] = [
                 { "blogDetails.title": { $regex: `^${req.query.keyword1.trim()}`, $options: 'i' } },
+                { "blogDetails.reviewDetails.reviewerName": { $regex: `^${req.query.keyword1.trim()}`, $options: 'i' } },
             ]
         }
 
@@ -175,13 +179,40 @@ const findAllAuther = async (req, res) => {
                 $match: searchcriteria
             },
 
+
             { $sort: { createdAt: 1 } },
+
             {
                 $lookup:
                 {
                     from: "blog",
                     localField: "_id",
                     foreignField: "authorId",
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: "review",
+                                localField: "_id",
+                                foreignField: "blogId",
+                                as: "reviewDetails"
+                            }
+                        },
+
+
+                        {
+                            $unwind: {
+                                path: "$reviewDetails",
+                                preserveNullAndEmptyArrays: true
+
+                            }
+                        },
+
+                        // {
+                        //     $project: {
+                        //         reviewDetails: 0
+                        //     }
+                        // }
+                    ],
                     as: "blogDetails"
                 }
             },
@@ -193,21 +224,21 @@ const findAllAuther = async (req, res) => {
 
                 }
             },
-            { $match: searchcriteria1 },
 
-            {
-                $lookup: {
-                    from: "review",
-                    localField: "blogDetails._id",
-                    foreignField: "blogId",
-                    as: "reviewDetails"
-                }
-            },
+            // {
+            //     $lookup: {
+            //         from: "review",
+            //         localField: "blogDetails._id",
+            //         foreignField: "blogId",
+            //         as: "reviewDetails"
+            //     }
+            // },
             {
                 $project: {
                     password: 0,
                 }
             },
+            { $match: searchcriteria1 },
 
             {
                 $facet: {
@@ -221,6 +252,10 @@ const findAllAuther = async (req, res) => {
                 }
             },
         ])
+
+        if (!allAuthor[0]?.data.length) {
+            return res.status(404).send({ message: "No data found" })
+        }
 
 
         res.status(200).send({

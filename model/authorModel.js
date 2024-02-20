@@ -33,7 +33,12 @@ const authorSchema = new mongoose.Schema({
     gender: {
         type: mongoose.Schema.Types.String,
         enum: ["male", "female", "other"]
-    }
+    },
+
+    addresss: [{
+        type: Object,
+
+    }]
 
 },
     { timestamps: true }

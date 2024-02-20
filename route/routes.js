@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express').Router();
+// const router = express.Router()
 const { authentication, authorization } = require("../middleware/middleware")
 const { createAuthor, findSingleAuthor, findAllAuther, updateAuthor, deleteAuthor, loginAuthor } = require("../controller/authorController")
 const { createBlog, getSingleBlog, getAllBlog, deleteBlog } = require("../controller/blogController")

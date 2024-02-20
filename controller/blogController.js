@@ -49,7 +49,44 @@ const getSingleBlog = async (req, res) => {
 const getAllBlog = async (req, res) => {
     try {
 
-        const blogData = await blogModel.find()
+        // const blogData = await blogModel.find()
+
+        const blogData = await blogModel.aggregate([
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            },
+
+
+            {
+                $lookup: {
+                    from: "author",
+                    localField: "authorId",
+                    foreignField: "_id",
+                    as: "authorDetails"
+                }
+            },
+
+            {
+                $unwind: {
+                    path: "$authorDetails",
+                    preserveNullAndEmptyArrays: true,
+
+                }
+            },
+            {
+                $lookup: {
+                    from: "review",
+                    localField: "_id",
+                    foreignField: "blogId",
+                    as: "reviewDetails"
+
+                }
+            }
+        ])
+
+
 
 
         res.status(200).send({ message: "Blog fetch successfully", blogData })

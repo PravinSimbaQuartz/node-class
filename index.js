@@ -21,7 +21,7 @@ mongoose.connect("mongodb+srv://pravinpatekar:wb0enET0wmCesDqn@cluster0.ftnu4ge.
 app.use("/api", route)
 app.listen(port, () => console.log(`MongoDB is listening on port ${port}`))
 
-
+// console.log(Date.now())
 
 app.all("*", function (req, res) {
     res.status(404).send({ message: "Url not found" })
@@ -32,3 +32,22 @@ app.all("*", function (req, res) {
 // await
 // async
 // after conecting to DB
+
+
+
+
+//SQL and NoSQL
+
+// //SQL => 
+// 1. Relational Database
+// 2 predefine Schema
+// 3. Oracle
+// 4 verically scallable
+
+
+
+// //NoSQL
+// 1.Non Relational Database
+// 2  not predefine // dynamic Schema
+// 3 MongoDB, couchDB
+// 4 horizontally scallable
