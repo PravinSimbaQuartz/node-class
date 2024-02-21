@@ -32,7 +32,7 @@ const authorization = async (req, res, next) => {
         const idFromToken = verifiedToken.authorId
         const { id } = req.params
 
-        const checkAuthor = await blogModel.findOne({ _id: new ObjectId(idFromToken) })
+        const checkAuthor = await authorModel.findOne({ _id: new ObjectId(id) })
         console.log(checkAuthor)
 
         if (idFromToken !== id) {
@@ -45,27 +45,30 @@ const authorization = async (req, res, next) => {
     }
 }
 
-// const authorization = async (req, res, next) => {
-//     try {
-//         const idFromToken = verifiedToken.authorId
-//         const { id } = req.params
+const bolgAuthorization = async (req, res, next) => {
+    try {
+        const idFromToken = verifiedToken.authorId
+        const { id } = req.params
 
-//         const checkBlog = await blogModel.findOne({ _id: new ObjectId(id) })
-//         console.log(checkAuthor)
+        const checkBlog = await blogModel.findOne({ _id: new ObjectId(id) })
+        console.log(checkAuthor)
 
-//         if (idFromToken !== checkBlog.authorId) {
-//             return res.status(403).send({ message: "Forbidden / You have not access of this route " })
-//         }
-//         next();
-//     } catch (error) {
-//         return res.status(500).send({ message: error.message })
+        if (idFromToken !== checkBlog.authorId) {
+            return res.status(403).send({ message: "Forbidden / You have not access of this route " })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).send({ message: error.message })
 
-//     }
-// }
-
-
+    }
+}
 
 
-module.exports = { authentication, authorization }
+
+
+module.exports = { authentication, authorization, bolgAuthorization }
+
+
+//RBAC
 
 
