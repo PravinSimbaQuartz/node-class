@@ -36,8 +36,8 @@ const authorSchema = new mongoose.Schema({
     },
 
     addresss: [{
-        type: Object,
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "blog"
     }]
 
 },
@@ -46,3 +46,33 @@ const authorSchema = new mongoose.Schema({
 
 
 module.exports = new mongoose.model("author", authorSchema, "author")
+
+
+
+
+
+//GYM
+
+// trainer => name, age, email, password, phoneNumber, address => [userId], [departmentId], [dietId]
+// user => name, age, email, password, phoneNumber, address, fees => [trainerId], [dietId], [department]
+// diet => eggs,milk => [trainerId]
+// equipments => dumbles etc
+// department => [subscriptionId]
+// subscription => 1 ,2,3,4,5,6,7,8,9,10
+
+
+
+//School
+// students => name, age, email, password, phoneNumber, address => [classId], [teacherId]
+// teachers => name, age, email, password, phoneNumber, address => [classId]
+// class=> standard, div => 
+// department => departmentName
+
+
+//Library managements  
+//books => name / title, description, category, subcategory,price, stocks,  [writerId]
+//reviews=> rating, reviewersName, [bookId]
+//users => name, email, password, phoneNumber, address, roles=> (user, writer) 
+//orders=> bookId,userId
+
+

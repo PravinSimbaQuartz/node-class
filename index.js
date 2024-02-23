@@ -4,13 +4,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const route = require("./route/routes")
 const authorModel = require("./model/authorModel")
-const port = 6000
-
+const { database, port } = require("./config/keys")
+console.log('DATABASE_NAME, PORT', database, port)
 const app = express();
 
 app.use(express.json())
 
-mongoose.connect("mongodb+srv://pravinpatekar:wb0enET0wmCesDqn@cluster0.ftnu4ge.mongodb.net/", {
+mongoose.connect(database, {
     useNewUrlParser: true,
 }).then(async () => {
     console.log("MongoDB is connected");
@@ -19,7 +19,7 @@ mongoose.connect("mongodb+srv://pravinpatekar:wb0enET0wmCesDqn@cluster0.ftnu4ge.
 ).catch((err) => console.log(err))
 
 app.use("/api", route)
-app.listen(port, () => console.log(`MongoDB is listening on port ${port}`))
+app.listen(port || 2000, () => console.log(`MongoDB is listening on port ${port}`))
 
 // console.log(Date.now())
 

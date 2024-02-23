@@ -26,6 +26,30 @@ const createAuthor = async function (req, res) {
         // const yourName = req.body.yourName
         // const yourName = req.body.yourName
 
+        // const { array } = req.body
+        // console.log(111111, array)
+
+        // for (let i of array) {
+
+        //     const salt = await bcrypt.genSalt(10)
+        //     console.log('salt', salt)
+
+        //     const hashPassword = await bcrypt.hash(i.password, salt)
+        //     console.log('hashPassword', hashPassword)
+        //     const authorData = new authorModel({
+        //         firstName: i.yourName,
+        //         lastName: i.yourSirName,
+        //         email: i.email,
+        //         password: hashPassword,
+        //         mobileNumber: i.mobileNumber,
+        //         isActive: i.isActive,
+        //         gender: i.gender,
+        //         addresss: i.addresss
+        //     })
+        //     await authorData.save()
+
+        // }
+
 
 
         if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
@@ -178,7 +202,11 @@ const findAllAuther = async (req, res) => {
             {
                 $match: searchcriteria
             },
-
+            {
+                $match: {
+                    addresss: { $exists: false }
+                },
+            },
 
             { $sort: { createdAt: 1 } },
 
